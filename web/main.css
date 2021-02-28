@@ -1,0 +1,57 @@
+#startpage {
+	padding: 25px
+}
+
+#loadingpage {
+	padding: 25px;
+	padding-top: 150px;
+	display: none;
+}
+
+#loadingpage p {
+	text-align: center;
+	padding-top: 10px;
+}
+
+#successpage {
+	padding: 25px;
+	display: none;
+}
+
+#successpage p {
+	padding-top: 25px;
+}
+
+#successpage button.float-start {
+	margin-left: 50px;
+}
+
+#successpage button.float-end {
+	margin-right: 50px;
+}
+
+#successpage .clearfix {
+	padding-top: 50px;
+}
+
+#errorpage {
+	padding: 25px;
+	display: none;
+}
+
+#errorpage .clearfix {
+	padding-top: 50px;
+}
+
+h1 {
+	text-align: center;
+}
+
+h6 {
+	text-align: center;
+	color: grey;
+}
+
+.progress-bar {
+	width: 75%;
+}
