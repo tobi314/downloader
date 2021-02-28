@@ -4,7 +4,7 @@ async function submitButton() {
 	document.getElementById("loadingpage").style.display = "block";
 	await new Promise(r => setTimeout(r, 2000));
 	document.getElementById("loadingpage").style.display = "none";
-	document.getElementById("errorpage").style.display = "block"
+	document.getElementById("successpage").style.display = "block"
 }
 
 function quitButton(){
