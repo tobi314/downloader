@@ -35,15 +35,15 @@
       	</div>
       	<div id="loadingpage">
       		<div class="progress">
-  				<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+  				<div id="progressbar1" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
 			</div>
-			<p>loading...</p>
+			<p>downloading...</p>
 		</div>
 		<div id="successpage">
-			<h1>Loading Successfull!</h1>
-			<p>Downloaded 44 files to: 
+			<h1>Downloading Successfull!</h1>
+			<p>Downloaded <span id="num_files">44</span> files to: 
 				<nav aria-label="breadcrumb">
-  					<ol class="breadcrumb">
+  					<ol class="breadcrumb" id="filepath">
     					<li class="breadcrumb-item"><a href="#">Home</a></li>
     					<li class="breadcrumb-item"><a href="#">Library</a></li>
     					<li class="breadcrumb-item active" aria-current="page">Data</li>

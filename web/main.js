@@ -5,18 +5,35 @@ async function submitButton() {
 	document.getElementById("startpage").style.display = "none";
 	document.getElementById("loadingpage").style.display = "block";
 	await new Promise(r => setTimeout(r, 2000));
-	document.getElementById("loadingpage").style.display = "none";
-	document.getElementById("successpage").style.display = "block"
 }
 
-function quitButton(){
+function quitButton() {
 	eel.quitButton_click();
 	window.close()
 }
 
-function backButton(){
+function backButton() {
 	eel.backButton_click();
 	document.getElementById("successpage").style.display = "none";
 	document.getElementById("errorpage").style.display = "none";
 	document.getElementById("startpage").style.display = "block"
+}
+
+eel.expose(updateProgressbar);
+function updateProgressbar(i) {
+	document.getElementById("progressbar1").setAttribute("aria-valuenow", i)
+}
+
+eel.expose(setupProgressbar);
+function setupProgressbar(min, max) {
+	document.getElementById("progressbar1").setAttribute("aria-valuemin", min);
+	document.getElementById("progressbar1").setAttribute("aria-valuemax", max)
+}
+
+eel.expose(showEndScreen);
+function showEndScreen(n, filepath) {
+	document.getElementById("num_files").innerHTML = n;
+	document.getElementById("filepath").innerHTML = filepath;
+	document.getElementById("loadingpage").style.display = "none";
+	document.getElementById("successpage").style.display = "block"
 }

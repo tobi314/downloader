@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
-import argparse
-import click
-import time
+import eel
 import os
 
 def login(driver, username, password, target_url):
@@ -47,17 +45,16 @@ def download_files(driver, pages, cutoff):
 	return i
 
 def wait_for_downloads(driver, dir, num_downloads, num_existing_files):
+	driver.implicitly_wait(2)
 	while True:
 		files = os.listdir(dir)
 		d = [file for file in files if file.endswith(".crdownload")]
-		l = len(files)
-		#print(d, l)
-		if d or l != num_existing_files + num_downloads:
+		if d:
 			driver.implicitly_wait(1)
 		else:
 			break
 
-def main(username, password, url, download_dir=os.getcwd()+"/downloads"):
+def main(username, password, url, download_dir):
 	options = webdriver.ChromeOptions()
 	options.add_experimental_option("prefs", {"download.default_directory": download_dir,
 											  "download.prompt_for_download": False,
@@ -73,7 +70,52 @@ def main(username, password, url, download_dir=os.getcwd()+"/downloads"):
 	pages = get_pages(driver)
 	n = download_files(driver, pages, 5000)
 	wait_for_downloads(driver, download_dir, n, m)
+	return n
 
-if __name__ == "__main__":
-	main("mjeltsch", "***REMOVED***", "https://workgroups.helsinki.fi/display/IP/Workshop+4", 
-		 download_dir="/home/tobias/Desktop/test_downloads")
+def generate_filepath_html(path):
+	html = '<ol class="breadcrumb" id="filepath">'
+
+	folders = []
+	while 1:
+	    path, folder = os.path.split(path)
+
+	    if folder != "":
+	        folders.append(folder)
+	    elif path != "":
+	        folders.append(path)
+	        break
+	folders.reverse()
+	del folders[0]
+
+	for folder in folders:
+		html += '<li class="breadcrumb-item"><a href="#">'+folder+'</a></li>'
+
+	html += "</ol>"
+
+	return html
+
+@eel.expose
+def quitButton_click():
+	print("quit Button was clicked")
+
+@eel.expose
+def submitButton_click(username, password, url):
+	print("submit Button was clicked")
+	print(username, password, url)
+	filepath = os.path.join(os.getcwd(),"downloads")
+	n = main(username, password, url, filepath)
+	print("ready")
+	eel.showEndScreen(n, generate_filepath_html(filepath))
+
+@eel.expose
+def backButton_click():
+	print("back Button was clicked")
+
+if __name__ == '__main__':
+	eel.init("web")
+	eel.start("index.html", size=(600,400), block=True)
+
+
+#if __name__ == "__main__":
+#	main("mjeltsch", "***REMOVED***", "https://workgroups.helsinki.fi/display/IP/Workshop+4", 
+#		 download_dir="/home/tobias/Desktop/test_downloads")
