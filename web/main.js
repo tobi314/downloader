@@ -1,5 +1,7 @@
 async function submitButton() {
-	eel.submitButton_click();
+	eel.submitButton_click(document.getElementById("exampleInputUsername1").value, 
+						   document.getElementById("exampleInputPassword1").value,
+						   document.getElementById("exampleInputUrl1").value);
 	document.getElementById("startpage").style.display = "none";
 	document.getElementById("loadingpage").style.display = "block";
 	await new Promise(r => setTimeout(r, 2000));

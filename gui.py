@@ -2,14 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import eel
+import main
 
 @eel.expose
 def quitButton_click():
 	print("quit Button was clicked")
 
 @eel.expose
-def submitButton_click():
+def submitButton_click(username, password, url):#, download_dir):
 	print("submit Button was clicked")
+	print(username, password, url)
+	main.main(username, password, url)
 
 @eel.expose
 def backButton_click():

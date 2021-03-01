@@ -7,15 +7,11 @@ import click
 import time
 import os
 
-USERNAME, PASSWORD, URL = "mjeltsch", "***REMOVED***", "https://workgroups.helsinki.fi/display/IP/Workshop+4"#"https://workgroups.helsinki.fi/display/TS/Sana+on+vapaa"
-DOWNLOAD_DIR = "/home/tobias/Desktop/test_downloads"
-
-
-def login(driver, url):
-	driver.get(url)
+def login(driver, username, password, target_url):
+	driver.get(target_url)
 	driver.find_element_by_id("default_login").click()
-	driver.find_element_by_id("username").send_keys(USERNAME)
-	driver.find_element_by_id("password").send_keys(PASSWORD)
+	driver.find_element_by_id("username").send_keys(username)
+	driver.find_element_by_id("password").send_keys(password)
 	driver.find_element_by_class_name("form-button").click()
 
 def get_pages(driver):
@@ -55,28 +51,29 @@ def wait_for_downloads(driver, dir, num_downloads, num_existing_files):
 		files = os.listdir(dir)
 		d = [file for file in files if file.endswith(".crdownload")]
 		l = len(files)
-		print(d, l)
+		#print(d, l)
 		if d or l != num_existing_files + num_downloads:
 			driver.implicitly_wait(1)
 		else:
 			break
 
-def main():
+def main(username, password, url, download_dir=os.getcwd()+"/downloads"):
 	options = webdriver.ChromeOptions()
-	options.add_experimental_option("prefs", {"download.default_directory": DOWNLOAD_DIR,
+	options.add_experimental_option("prefs", {"download.default_directory": download_dir,
 											  "download.prompt_for_download": False,
-  											  "download.directory_upgrade": True,
+ 											  "download.directory_upgrade": True,
   											  "safebrowsing.enabled": True})
 
-	if False:
+	if True:
 		options.add_argument('--headless')
 
-	m = len(os.listdir(DOWNLOAD_DIR))
+	m = len(os.listdir(download_dir))
 	driver = webdriver.Chrome(options=options)
-	login(driver, URL)
+	login(driver, username, password, url)
 	pages = get_pages(driver)
-	n = download_files(driver, pages, 5)
-	wait_for_downloads(driver, DOWNLOAD_DIR, n, m)
+	n = download_files(driver, pages, 5000)
+	wait_for_downloads(driver, download_dir, n, m)
 
 if __name__ == "__main__":
-	main()
+	main("mjeltsch", "***REMOVED***", "https://workgroups.helsinki.fi/display/IP/Workshop+4", 
+		 download_dir="/home/tobias/Desktop/test_downloads")
