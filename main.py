@@ -73,7 +73,7 @@ def main(username, password, url, download_dir):
 		pages = get_pages(driver)
 		n = download_files(driver, pages, 5000)
 		wait_for_downloads(driver, download_dir, n, m)
-		eel.showEndScreen(n, generate_filepath_html(filepath))
+		eel.showEndScreen(n, generate_filepath_html(download_dir))
 
 	except Exception as e:
 		tb1 = traceback.TracebackException.from_exception(e)
