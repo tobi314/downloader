@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
+import traceback
 import eel
 import os
 
@@ -37,6 +38,7 @@ def download_files(driver, pages, cutoff):
 			driver.find_element_by_css_selector('a[aria-label="Download"]').click()
 			driver.find_element_by_css_selector('button[aria-label="Close"]').click()
 			i += 1
+			eel.updateProgressbar((i/len(pages))*100,"downloading "+link.get_attribute("data-linked-resource-default-alias")+"...")
 
 			if i > cutoff:
 				print("\nCutoff point reached, aborting programm")
@@ -55,22 +57,29 @@ def wait_for_downloads(driver, dir, num_downloads, num_existing_files):
 			break
 
 def main(username, password, url, download_dir):
-	options = webdriver.ChromeOptions()
-	options.add_experimental_option("prefs", {"download.default_directory": download_dir,
-											  "download.prompt_for_download": False,
- 											  "download.directory_upgrade": True,
-  											  "safebrowsing.enabled": True})
+	try:
+		options = webdriver.ChromeOptions()
+		options.add_experimental_option("prefs", {"download.default_directory": download_dir,
+												  "download.prompt_for_download": False,
+	 											  "download.directory_upgrade": True,
+	  											  "safebrowsing.enabled": True})
 
-	if True:
-		options.add_argument('--headless')
+		if True:
+			options.add_argument('--headless')
 
-	m = len(os.listdir(download_dir))
-	driver = webdriver.Chrome(options=options)
-	login(driver, username, password, url)
-	pages = get_pages(driver)
-	n = download_files(driver, pages, 5000)
-	wait_for_downloads(driver, download_dir, n, m)
-	return n
+		m = len(os.listdir(download_dir))
+		driver = webdriver.Chrome(options=options)
+		login(driver, username, password, url)
+		pages = get_pages(driver)
+		n = download_files(driver, pages, 5000)
+		wait_for_downloads(driver, download_dir, n, m)
+		eel.showEndScreen(n, generate_filepath_html(filepath))
+
+	except Exception as e:
+		tb1 = traceback.TracebackException.from_exception(e)
+		t = "".join(tb1.format())
+		print(t)
+		eel.showErrorScreen(t)
 
 def generate_filepath_html(path):
 	html = '<ol class="breadcrumb" id="filepath">'
@@ -103,9 +112,8 @@ def submitButton_click(username, password, url):
 	print("submit Button was clicked")
 	print(username, password, url)
 	filepath = os.path.join(os.getcwd(),"downloads")
-	n = main(username, password, url, filepath)
-	print("ready")
-	eel.showEndScreen(n, generate_filepath_html(filepath))
+	main(username, password, url, filepath)
+
 
 @eel.expose
 def backButton_click():

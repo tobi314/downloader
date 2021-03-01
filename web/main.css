@@ -43,6 +43,10 @@
 	padding-top: 50px;
 }
 
+#errorDescription {
+	text-align: left;
+}
+
 h1 {
 	text-align: center;
 }
@@ -53,7 +57,7 @@ h6 {
 }
 
 .progress-bar {
-	width: 75%;
+	width: 5%;
 }
 
 .alert {
