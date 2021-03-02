@@ -13,26 +13,95 @@
         	<strong>Error!</strong> A problem has been occurred while submitting your data.
         	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     	</div> -->
-		<div id="startpage">
+		<div id="loginpage">
 			<h1>Login</h1>
 			<form>
   				<div class="mb-3">
     				<label for="exampleInputUsername1" class="form-label">Username</label>
-    				<input type="username" class="form-control" id="exampleInputUsername1" required>
+    				<input type="username" class="form-control" id="exampleInputUsername1">
+    				<div class="invalid-feedback">
+            			Invalid username or password!
+          			</div>
   				</div>
   				<div class="mb-3">
     				<label for="exampleInputPassword1" class="form-label">Password</label>
-    				<input type="password" class="form-control" id="exampleInputPassword1" required>
+    				<input type="password" class="form-control" id="exampleInputPassword1">
+    				<div class="invalid-feedback">
+            			Invalid username or password!
+          			</div>
   				</div>
+
+  				<!--
   				<div class="mb-3">
     				<label for="exampleInputUrl1" class="form-label">URL</label>
     				<input type="url" class="form-control" id="exampleInputUrl1" required>
-  				</div>
+  				</div> -->
   				<div class="clearfix"> 
-  					<button type="button" onclick="submitButton()" class="btn btn-primary float-end">Next</button>
+  					<button type="button" onclick="startButtonClick()" class="btn btn-primary float-end">Start Download</button>
   				</div>
 			</form>
       	</div>
+		<div id="optionspage">
+			<h1>Download Options</h1>
+			<form>
+				<div class="mb-3">
+    				<label for="exampleInputUrl1" class="form-label">URL</label>
+    				<input type="url" class="form-control" id="exampleInputUrl1" required>
+  				</div>
+  				<div class="accordion accordion-flush" id="accordionFlushExample">
+				  	<div class="accordion-item">
+				    	<h2 class="accordion-header" id="flush-headingOne">
+				      		<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+				        	Allowed file extensions:
+				      		</button>
+				    	</h2>
+				    	<div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+				      		<div class="accordion-body">
+				      			<div class="form-check form-check-inline">
+								  <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
+								  <label class="form-check-label" for="inlineCheckbox1">.pdf</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked>
+								  <label class="form-check-label" for="inlineCheckbox2">.xls</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" checked>
+								  <label class="form-check-label" for="inlineCheckbox3">.pptx</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4" checked>
+								  <label class="form-check-label" for="inlineCheckbox4">.docx</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option5" checked>
+								  <label class="form-check-label" for="inlineCheckbox5">.txt</label>
+								</div>
+								<div class="form-check form-check-inline">
+								  <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option6" checked>
+								  <label class="form-check-label" for="inlineCheckbox6">others</label>
+								</div>
+				      		</div>
+				    	</div>
+				  	</div>
+				  	<div class="accordion-item">
+				    	<h2 class="accordion-header" id="flush-headingTwo">
+				      		<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+				        	Advanced Options:
+				      		</button>
+				    	</h2>
+				    	<div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+				      		<div class="accordion-body">
+				      			<p> advanced options here </p>
+				      		</div>
+				    	</div>
+				  	</div>
+				</div>
+				<div class="clearfix"> 
+  					<button type="button" onclick="nextButtonClick()" class="btn btn-primary float-end">Next</button>
+  				</div>
+			</form>
+      	</div>      	
       	<div id="loadingpage">
       		<div class="progress">
   				<div id="progressbar1" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
@@ -51,8 +120,8 @@
 				</nav>
 			</p>
 			<div class="clearfix"> 
-				<button type="button" onclick="backButton()" class="btn btn-secondary btn-lg float-start">Back</button>
-      			<button type="button" onclick="quitButton()" class="btn btn-primary btn-lg float-end">Quit</button>
+				<button type="button" onclick="backButtonClick()" class="btn btn-secondary btn-lg float-start">Back</button>
+      			<button type="button" onclick="quitButtonClick()" class="btn btn-primary btn-lg float-end">Quit</button>
       		</div>
 		</div>
 		<div id="errorpage">

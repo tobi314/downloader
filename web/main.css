@@ -1,5 +1,14 @@
-#startpage {
-	padding: 25px
+#loginpage {
+	padding: 25px;
+	display: none;
+}
+
+#optionspage {
+	padding: 25px;
+}
+
+#optionspage .clearfix {
+	padding-top: 25px
 }
 
 #loadingpage {
