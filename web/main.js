@@ -38,7 +38,9 @@ function backButtonClick() { //executed when user clicks "Back"-Button
 
 eel.expose(wrongLogin);
 function wrongLogin() {
-	window.alert("wrong login") //make better later
+	//marks input fields as invalid
+	document.getElementById("exampleInputUsername1").classList.add("is-invalid");
+	document.getElementById("exampleInputPassword1").classList.add("is-invalid");
 
 	//reshows login page
 	document.getElementById("loginpage").style.display = "block"; 
@@ -58,7 +60,11 @@ function showEndScreen(n, filepath) { //shows EndScreen, called from python back
 
 	//hides current page and shows endscreen
 	document.getElementById("loadingpage").style.display = "none";
-	document.getElementById("successpage").style.display = "block"
+	document.getElementById("successpage").style.display = "block";
+
+	//unmarks invalid from inputs, so the they wont be invalid if user visits that page again
+	document.getElementById("exampleInputUsername1").classList.remove("is-invalid");
+	document.getElementById("exampleInputPassword1").classList.remove("is-invalid");
 }
 
 eel.expose(showErrorScreen);

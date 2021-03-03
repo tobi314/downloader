@@ -56,8 +56,8 @@ def download_files(pages, cutoff): #downloads files
 	for page in pages: #loops through pages
 		driver.get(page)
 		for link in driver.find_elements_by_css_selector('a[href^="/download"]'): #loops through all downloadable links in page
-			ext = os.path.splitext(link.get_attribute("data-linked-resource-default-alias"))[1]
-			if (ext in file_extensions[0]) or ("" in file_extensions[0] and ext not in file_extensions[1]):
+			ext = os.path.splitext(link.get_attribute("data-linked-resource-default-alias"))[1] #gets extension of file
+			if (ext in file_extensions[0]) or ("" in file_extensions[0] and ext not in file_extensions[1]): #check whether extension is allowed
 				link.click()
 				driver.find_element_by_css_selector('a[aria-label="Download"]').click() #downloads file
 				driver.find_element_by_css_selector('button[aria-label="Close"]').click() #closes file
@@ -138,7 +138,7 @@ def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed w
 		if "" in file_extensions[1]:
 			del file_extensions[1][file_extensions[1].index("")]
 		#print(file_extensions)
-		
+
 		global screenshot_on_error #ensures that all parts of the programm can access screenshot_on_error
 		screenshot_on_error = advanced_options["screenshot"]
 
