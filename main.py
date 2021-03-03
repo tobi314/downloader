@@ -7,8 +7,7 @@ import eel
 import time
 import os
 
-def handle_exception(e):
-	print("Exception caught")
+def handle_exception(e): #displays errorscreen, optionally saves screenshot of webdriver
 	tb1 = traceback.TracebackException.from_exception(e)
 	t = "".join(tb1.format())
 	eel.showErrorScreen(t)
@@ -16,36 +15,37 @@ def handle_exception(e):
 		driver.save_screenshot("error.png")
 
 
-def login(driver, username, password):
+def login(username, password): #logs in into page
 	driver.find_element_by_id("default_login").click()
 	driver.find_element_by_id("username").send_keys(username)
 	driver.find_element_by_id("password").send_keys(password)
 	driver.find_element_by_class_name("form-button").click()
-	#driver.implicitly_wait(1)
-	if driver.find_elements_by_css_selector("p.form-error"):
+
+	if driver.find_elements_by_css_selector("p.form-error"): #checks whether login failed
 		return False
 	else:
 		return True
 
-def get_pages(driver):
+def get_pages(): #scans through all subpages of current page and returns their urls
 	driver.implicitly_wait(2)
-	lists = driver.find_elements_by_css_selector("ul.rw_pagetree_list")
-	for _list in lists:
+
+	lists = driver.find_elements_by_css_selector("ul.rw_pagetree_list") #gets all pagetrees
+	for _list in lists: #looks through pagetrees to find current page
 		if driver.find_element_by_class_name("rw_current_page_item"):
 			link_container = _list
 
-	elements = link_container.find_elements_by_css_selector("ul.rw_pagetree_list a")
+	elements = link_container.find_elements_by_css_selector("ul.rw_pagetree_list a") #gets all page links
 
 	links = []
-	for element in elements:
-		links.append(element.get_attribute("href"))
+	for element in elements: #gets thier urls
+		links.append(element.get_attribute("href")) 
 
 	return links
 
 
-def download_files(driver, pages, cutoff):
+def download_files(pages, cutoff): #downloads files
 	items = 0
-	for page in pages:
+	for page in pages: #loops through pages to get number of files
 		driver.get(page)
 		for link in driver.find_elements_by_css_selector('a[href^="/download"]'):
 			for extension in allowed_extensions.keys():
@@ -53,43 +53,43 @@ def download_files(driver, pages, cutoff):
 					items += 1
 
 	i = 1
-	for page in pages:
+	for page in pages: #loops through pages downloads 
 		driver.get(page)
-		for link in driver.find_elements_by_css_selector('a[href^="/download"]'):
-			for extension in allowed_extensions:
+		for link in driver.find_elements_by_css_selector('a[href^="/download"]'): #loops through all downloadable links in page
+			for extension in allowed_extensions: #loops through allowed extensions, downloads file if match
 				if allowed_extensions[extension] and link.get_attribute("data-linked-resource-default-alias").endswith(extension):
 					link.click()
-					driver.find_element_by_css_selector('a[aria-label="Download"]').click()
-					driver.find_element_by_css_selector('button[aria-label="Close"]').click()
+					driver.find_element_by_css_selector('a[aria-label="Download"]').click() #downloads file
+					driver.find_element_by_css_selector('button[aria-label="Close"]').click() #closes file
+
+					#updates progressbar
 					eel.updateProgressbar((i/items)*100,'downloading "'+link.get_attribute("data-linked-resource-default-alias")+'"...')
-					#print(i, items)
 
 					i += 1
-					if i > cutoff:
+					if i > cutoff: #in case of there beeing to many files, aborts download
 						print("\nCutoff point reached, aborting programm")
 						return i-1
 
 	return i-1
 
-def wait_for_downloads(driver, dir, num_downloads, num_existing_files):
+def wait_for_downloads(): #waits for downloads to finish
 	driver.implicitly_wait(2)
-	while True:
-		files = os.listdir(dir)
-		d = [file for file in files if file.endswith(".crdownload")]
-		if d:
+
+	while True: #loops through download dictionary until there are no unfinished downloads anymore
+		files = os.listdir(download_dir)
+		d = [file for file in files if file.endswith(".crdownload")] #lists all unfinished downloads
+		if d: #waits if any are in list
 			driver.implicitly_wait(1)
 		else:
 			break
 
-def get_download_dir():
-	#return os.path.join(os.getcwd(), "downloads")
+def get_download_dir(): #returns system download-directory
 	return os.path.join(os.path.expanduser("~"), "Downloads")
 
-def generate_filepath_html(path):
-	html = '<ol class="breadcrumb" id="filepath">'
-
+def generate_filepath_html(path): #dynamically generates html to display download path
+	html = '<ol class="breadcrumb" id="filepath">' #starts html <ol>
 	folders = []
-	while 1:
+	while 1: #splits filepath into pieces
 	    path, folder = os.path.split(path)
 
 	    if folder != "":
@@ -100,79 +100,65 @@ def generate_filepath_html(path):
 	folders.reverse()
 	del folders[0]
 
-	for folder in folders:
+	for folder in folders: #adds <li> to html for each filepath-piece
 		html += '<li class="breadcrumb-item">'+folder+'</li>'
 
-	html += "</ol>"
+	html += "</ol>" #ends html <ol>
 
 	return html
 
-@eel.expose
+@eel.expose #exposes function, so that it can be called from main.js
 def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed whith "Next"-Button click, starts webdriver
 	try:
-		print("next Button was clicked")
-		print(url, allowed_file_extensions, advanced_options)
+		#print(url, allowed_file_extensions, advanced_options)
 		options = webdriver.ChromeOptions()
 
-		global download_dir
-		if advanced_options["download_dir"]:
+		global download_dir #ensures that all parts of the programm can access download_dir
+		if advanced_options["download_dir"]: #checks whether user specified download_dir
 			download_dir = advanced_options["download_dir"]
 		else:
-			download_dir = get_download_dir()
+			download_dir = get_download_dir() #else gets standart download_dir
 
 		if advanced_options["headless"]:
 			options.add_argument('--headless')
 
+		#stets up webdriver to be able to automatically download files on click, without asking user confirmation
 		options.add_experimental_option("prefs", {"download.default_directory": download_dir,
 												  "download.prompt_for_download": False,
 			 									  "download.directory_upgrade": True,
 			  									  "safebrowsing.enabled": True})
 
-		global allowed_extensions
+		global allowed_extensions #ensures that all parts of the programm can access allowed_extensions
 		allowed_extensions = dict(zip([".pdf", ".xls", ".pptx", ".docx", ".txt", ""], allowed_file_extensions))
 
-		global screenshot_on_error
+		global screenshot_on_error #ensures that all parts of the programm can access screenshot_on_error
 		screenshot_on_error = advanced_options["screenshot"]
 
-		global driver
+		global driver #ensures that all parts of the programm can access the webdriver
 		driver = webdriver.Chrome(options=options)
 		driver.get(url)
 
 	except Exception as e:
 		handle_exception(e)
 
-@eel.expose
+@eel.expose #exposes function, so that it can be called from main.js
 def startButtonClick(username, password):
 	try:
-		print("start Button was clicked")
-		print(username, password)
-		raise ValueError
-		if login(driver, username, password):
+		#print(username, password)
+		#raise ValueError
+		if login(username, password): #logs in
 			m = len(os.listdir(download_dir))
-			pages = get_pages(driver)
-			n = download_files(driver, pages, 5000)
-			wait_for_downloads(driver, download_dir, n, m)
-			eel.showEndScreen(n, generate_filepath_html(download_dir))
-		else:
+			pages = get_pages() #gets pages
+			n = download_files(pages, 5000) #downloads files, cuts programm of after 5000
+			wait_for_downloads() #waits for downloads to finish
+			eel.showEndScreen(n, generate_filepath_html(download_dir)) #shows endscreen
+
+		else: #if login failed, displays error
 			eel.wrongLogin()
 
 	except Exception as e:
 		handle_exception(e)
 
-@eel.expose
-def quitButtonClick():
-	print("quit Button was clicked")
-
-
-@eel.expose
-def backButtonClick():
-	print("back Button was clicked")
-
 if __name__ == '__main__':
 	eel.init("web")
 	eel.start("index.html", size=(600,450), block=True)
-
-
-#if __name__ == "__main__":
-#	main("mjeltsch", "***REMOVED***", "https://workgroups.helsinki.fi/display/IP/Workshop+4", 
-#		 download_dir="/home/tobias/Desktop/test_downloads")

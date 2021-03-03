@@ -29,7 +29,8 @@ function quitButtonClick() { //executed when user clicks "Quit"-Button
 }
 
 function backButtonClick() { //executed when user clicks "Back"-Button
-	eel.backButtonClick();
+
+	//hides all possible current pages and shows startpage
 	document.getElementById("successpage").style.display = "none";
 	document.getElementById("errorpage").style.display = "none";
 	document.getElementById("optionspage").style.display = "block";
@@ -37,29 +38,34 @@ function backButtonClick() { //executed when user clicks "Back"-Button
 
 eel.expose(wrongLogin);
 function wrongLogin() {
+	window.alert("wrong login") //make better later
+
+	//reshows login page
 	document.getElementById("loginpage").style.display = "block"; 
 	document.getElementById("loadingpage").style.display = "none";
-
-	window.alert("wrong login") //make better later
 }
 
 eel.expose(updateProgressbar); 
 function updateProgressbar(len, text) { //updates progressbar, called from python backend
-	$(".progress-bar").css("width", len + "%")
-	document.getElementById("progresstext").innerHTML = text
+	$(".progress-bar").css("width", len + "%") //changes progressbar width
+	document.getElementById("progresstext").innerHTML = text //changes text below progressbar to currnet file being downloaded
 }
 
 eel.expose(showEndScreen);
 function showEndScreen(n, filepath) { //shows EndScreen, called from python backend
-	document.getElementById("num_files").innerHTML = n;
-	document.getElementById("filepath").innerHTML = filepath;
+	document.getElementById("num_files").innerHTML = n; //adds number of downloaded files -label
+	document.getElementById("filepath").innerHTML = filepath; //adds file destination -label
+
+	//hides current page and shows endscreen
 	document.getElementById("loadingpage").style.display = "none";
 	document.getElementById("successpage").style.display = "block"
 }
 
 eel.expose(showErrorScreen);
 function showErrorScreen(text) { //shows ErrorScreen, called from python backend
-	document.getElementById("errorDescription").innerHTML = text;
+	document.getElementById("errorDescription").innerHTML = text; //adds error description
+
+	//hides all possible current pages and shows error-page
 	document.getElementById("loginpage").style.display = "none";
 	document.getElementById("loadingpage").style.display = "none";
 	document.getElementById("successpage").style.display = "none";
