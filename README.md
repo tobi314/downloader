@@ -2,7 +2,7 @@
 
 **Version 1.0**
 
-A Programm that automatically downloads files from <workgroups.helsinki.fi>
+A Programm that automatically downloads files from [workgroups.helsinki.fi](workgroups.helsinki.fi)
 
 ## Requirements
 
