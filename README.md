@@ -3,6 +3,7 @@
 **Version 1.0**
 
 A Programm that automatically downloads files from <https://workgroups.helsinki.fi>
+Tested on Ubuntu 18.04.5 LTS, Windows 10 Home and macOS Sierra
 
 ## Requirements
 
