@@ -24,6 +24,12 @@ Just download the source code and install all requirements
 
 Execute main.py
 
->sudo chmod a+x main.py
+>sudo chmod a+x main.py\
 >./main.py
+
+## License & copyright
+
+Distributed under GNU General Public License v3.0.
+
+© Tobias A. Jeltsch
 
