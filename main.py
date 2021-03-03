@@ -48,27 +48,27 @@ def download_files(pages, cutoff): #downloads files
 	for page in pages: #loops through pages to get number of files
 		driver.get(page)
 		for link in driver.find_elements_by_css_selector('a[href^="/download"]'):
-			for extension in allowed_extensions.keys():
-				if allowed_extensions[extension] and link.get_attribute("data-linked-resource-default-alias").endswith(extension):
-					items += 1
+			ext = os.path.splitext(link.get_attribute("data-linked-resource-default-alias"))[1]
+			if (ext in file_extensions[0]) or ("" in file_extensions[0] and ext not in file_extensions[1]):
+				items += 1
 
 	i = 1
-	for page in pages: #loops through pages downloads 
+	for page in pages: #loops through pages
 		driver.get(page)
 		for link in driver.find_elements_by_css_selector('a[href^="/download"]'): #loops through all downloadable links in page
-			for extension in allowed_extensions: #loops through allowed extensions, downloads file if match
-				if allowed_extensions[extension] and link.get_attribute("data-linked-resource-default-alias").endswith(extension):
-					link.click()
-					driver.find_element_by_css_selector('a[aria-label="Download"]').click() #downloads file
-					driver.find_element_by_css_selector('button[aria-label="Close"]').click() #closes file
+			ext = os.path.splitext(link.get_attribute("data-linked-resource-default-alias"))[1]
+			if (ext in file_extensions[0]) or ("" in file_extensions[0] and ext not in file_extensions[1]):
+				link.click()
+				driver.find_element_by_css_selector('a[aria-label="Download"]').click() #downloads file
+				driver.find_element_by_css_selector('button[aria-label="Close"]').click() #closes file
 
-					#updates progressbar
-					eel.updateProgressbar((i/items)*100,'downloading "'+link.get_attribute("data-linked-resource-default-alias")+'"...')
+				#updates progressbar
+				eel.updateProgressbar((i/items)*100,'downloading "'+link.get_attribute("data-linked-resource-default-alias")+'"...')
 
-					i += 1
-					if i > cutoff: #in case of there beeing to many files, aborts download
-						print("\nCutoff point reached, aborting programm")
-						return i-1
+				i += 1
+				if i > cutoff: #in case of there beeing too many files, aborts download
+					print("\nCutoff point reached, aborting programm")
+					return i-1
 
 	return i-1
 
@@ -128,9 +128,17 @@ def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed w
 			 									  "download.directory_upgrade": True,
 			  									  "safebrowsing.enabled": True})
 
-		global allowed_extensions #ensures that all parts of the programm can access allowed_extensions
-		allowed_extensions = dict(zip([".pdf", ".xls", ".pptx", ".docx", ".txt", ""], allowed_file_extensions))
-
+		global file_extensions #ensures that all parts of the programm can access allowed_extensions
+		file_extensions = [[],[]]
+		for i in range(len(allowed_file_extensions)): #splits file_extensions into allowed and disallowed
+			if allowed_file_extensions[i]:
+				file_extensions[0].append([".pdf", ".xls", ".pptx", ".docx", ".txt", ""][i])
+			else:
+				file_extensions[1].append([".pdf", ".xls", ".pptx", ".docx", ".txt", ""][i])
+		if "" in file_extensions[1]:
+			del file_extensions[1][file_extensions[1].index("")]
+		#print(file_extensions)
+		
 		global screenshot_on_error #ensures that all parts of the programm can access screenshot_on_error
 		screenshot_on_error = advanced_options["screenshot"]
 
@@ -161,4 +169,4 @@ def startButtonClick(username, password):
 
 if __name__ == '__main__':
 	eel.init("web")
-	eel.start("index.html", size=(600,450), block=True)
+	eel.start("index.html", size=(600,450))
