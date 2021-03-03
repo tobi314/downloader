@@ -116,7 +116,7 @@ def generate_filepath_html(path):
 	del folders[0]
 
 	for folder in folders:
-		html += '<li class="breadcrumb-item"><a href="#">'+folder+'</a></li>'
+		html += '<li class="breadcrumb-item">'+folder+'</li>'
 
 	html += "</ol>"
 
