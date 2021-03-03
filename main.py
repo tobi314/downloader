@@ -4,7 +4,17 @@
 from selenium import webdriver
 import traceback
 import eel
+import time
 import os
+
+def handle_exception(e):
+	print("Exception caught")
+	tb1 = traceback.TracebackException.from_exception(e)
+	t = "".join(tb1.format())
+	eel.showErrorScreen(t)
+	if screenshot_on_error:
+		driver.save_screenshot("error.png")
+
 
 def login(driver, username, password):
 	driver.find_element_by_id("default_login").click()
@@ -71,31 +81,6 @@ def wait_for_downloads(driver, dir, num_downloads, num_existing_files):
 		else:
 			break
 
-def main(username, password, url, download_dir):
-	try:
-		options = webdriver.ChromeOptions()
-		options.add_experimental_option("prefs", {"download.default_directory": download_dir,
-												  "download.prompt_for_download": False,
-	 											  "download.directory_upgrade": True,
-	  											  "safebrowsing.enabled": True})
-
-		if True:
-			options.add_argument('--headless')
-
-		m = len(os.listdir(download_dir))
-		driver = webdriver.Chrome(options=options)
-		login(driver, username, password, url)
-		pages = get_pages(driver)
-		n = download_files(driver, pages, 5000)
-		wait_for_downloads(driver, download_dir, n, m)
-		eel.showEndScreen(n, generate_filepath_html(download_dir))
-
-	except Exception as e:
-		tb1 = traceback.TracebackException.from_exception(e)
-		t = "".join(tb1.format())
-		print(t)
-		eel.showErrorScreen(t)
-
 def get_download_dir():
 	#return os.path.join(os.getcwd(), "downloads")
 	return os.path.join(os.path.expanduser("~"), "Downloads")
@@ -124,43 +109,55 @@ def generate_filepath_html(path):
 
 @eel.expose
 def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed whith "Next"-Button click, starts webdriver
-	print("next Button was clicked")
-	print(url, allowed_file_extensions, advanced_options)
-	options = webdriver.ChromeOptions()
+	try:
+		print("next Button was clicked")
+		print(url, allowed_file_extensions, advanced_options)
+		options = webdriver.ChromeOptions()
 
-	global download_dir
-	if advanced_options["download_dir"]:
-		download_dir = advanced_options["download_dir"]
-	else:
-		download_dir = get_download_dir()
+		global download_dir
+		if advanced_options["download_dir"]:
+			download_dir = advanced_options["download_dir"]
+		else:
+			download_dir = get_download_dir()
 
-	if advanced_options["headless"]:
-		options.add_argument('--headless')
+		if advanced_options["headless"]:
+			options.add_argument('--headless')
 
-	options.add_experimental_option("prefs", {"download.default_directory": download_dir,
-											  "download.prompt_for_download": False,
-	 										  "download.directory_upgrade": True,
-	  										  "safebrowsing.enabled": True})
+		options.add_experimental_option("prefs", {"download.default_directory": download_dir,
+												  "download.prompt_for_download": False,
+			 									  "download.directory_upgrade": True,
+			  									  "safebrowsing.enabled": True})
 
-	global allowed_extensions
-	allowed_extensions = dict(zip([".pdf", ".xls", ".pptx", ".docx", ".txt", ""], allowed_file_extensions))
+		global allowed_extensions
+		allowed_extensions = dict(zip([".pdf", ".xls", ".pptx", ".docx", ".txt", ""], allowed_file_extensions))
 
-	global driver
-	driver = webdriver.Chrome(options=options)
-	driver.get(url)
+		global screenshot_on_error
+		screenshot_on_error = advanced_options["screenshot"]
+
+		global driver
+		driver = webdriver.Chrome(options=options)
+		driver.get(url)
+
+	except Exception as e:
+		handle_exception(e)
 
 @eel.expose
 def startButtonClick(username, password):
-	print("start Button was clicked")
-	print(username, password)
-	if login(driver, username, password):
-		m = len(os.listdir(download_dir))
-		pages = get_pages(driver)
-		n = download_files(driver, pages, 5000)
-		wait_for_downloads(driver, download_dir, n, m)
-		eel.showEndScreen(n, generate_filepath_html(download_dir))
-	else:
-		eel.wrongLogin()
+	try:
+		print("start Button was clicked")
+		print(username, password)
+		raise ValueError
+		if login(driver, username, password):
+			m = len(os.listdir(download_dir))
+			pages = get_pages(driver)
+			n = download_files(driver, pages, 5000)
+			wait_for_downloads(driver, download_dir, n, m)
+			eel.showEndScreen(n, generate_filepath_html(download_dir))
+		else:
+			eel.wrongLogin()
+
+	except Exception as e:
+		handle_exception(e)
 
 @eel.expose
 def quitButtonClick():

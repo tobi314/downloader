@@ -6,7 +6,9 @@ function nextButtonClick() { //executed when user clicks "Next"-Button
 						 document.getElementById("inlineCheckbox4").checked,
 						 document.getElementById("inlineCheckbox5").checked,
 						 document.getElementById("inlineCheckbox6").checked],
-						{"download_dir": false, "headless": true});
+						{"download_dir": false, 
+						 "headless": !document.getElementById("inlineCheckbox7").checked, 
+						 "screenshot": document.getElementById("inlineCheckbox8").checked});
 
 	//hides current page and shows next
 	document.getElementById("optionspage").style.display = "none"; 
@@ -27,7 +29,7 @@ function quitButtonClick() { //executed when user clicks "Quit"-Button
 }
 
 function backButtonClick() { //executed when user clicks "Back"-Button
-	eel.backButton_click();
+	eel.backButtonClick();
 	document.getElementById("successpage").style.display = "none";
 	document.getElementById("errorpage").style.display = "none";
 	document.getElementById("optionspage").style.display = "block";
