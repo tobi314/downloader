@@ -7,7 +7,7 @@ A Programm that automatically downloads files from <https://workgroups.helsinki.
 ## Requirements
 
 The programm requires Chrome/Chromium and Chrome WebDriver 
-> apt install chromium-chromedriver
+> sudo apt install chromium-chromedriver
 
 in addition to the following python modules:
 
