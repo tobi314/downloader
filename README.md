@@ -15,7 +15,7 @@ in addition to the following python modules:
 * eel
 * selenium
 
-> sudo pip3 install eel selenium
+> sudo pip3 install -r requirements.txt
 
 ## Installation
 

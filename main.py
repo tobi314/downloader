@@ -6,6 +6,8 @@ import traceback
 import eel
 import time
 import os
+import sys
+import pathlib
 
 def handle_exception(e): #displays errorscreen, optionally saves screenshot of webdriver
 	tb1 = traceback.TracebackException.from_exception(e)
@@ -143,7 +145,16 @@ def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed w
 		screenshot_on_error = advanced_options["screenshot"]
 
 		global driver #ensures that all parts of the programm can access the webdriver
+
+		## use if chromedriver is in PATH
 		driver = webdriver.Chrome(options=options)
+
+		## use if chromedriver is in ./lib when running script under windows
+		#driver = webdriver.Chrome(pathlib.Path(os.get_cwd())/"lib"/"chromedriver.exe", options=options)
+
+		## use if chromedriver is in ./lib when compiling to .exe using --onefile
+		#driver = webdriver.Chrome(pathlib.Path(sys._MEIPASS)/"lib"/"chromedriver.exe", options=options)
+
 		driver.get(url)
 
 	except Exception as e:
@@ -169,4 +180,4 @@ def startButtonClick(username, password):
 
 if __name__ == '__main__':
 	eel.init("web")
-	eel.start("index.html", size=(600,450))
+	eel.start("index.html", size=(600,460))
