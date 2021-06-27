@@ -146,14 +146,12 @@ def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed w
 
 		global driver #ensures that all parts of the programm can access the webdriver
 
+		## use if os is windows and chromedriver is in /lib 
+		driver_location = pathlib.Path(getattr(sys, "._MEIPASS", os.getcwd()))/"lib"/"chromedriver.exe"
+		driver = webdriver.Chrome(driver_location, options=options)
+
 		## use if chromedriver is in PATH
-		driver = webdriver.Chrome(options=options)
-
-		## use if chromedriver is in ./lib when running script under windows
-		#driver = webdriver.Chrome(pathlib.Path(os.get_cwd())/"lib"/"chromedriver.exe", options=options)
-
-		## use if chromedriver is in ./lib when compiling to .exe using --onefile
-		#driver = webdriver.Chrome(pathlib.Path(sys._MEIPASS)/"lib"/"chromedriver.exe", options=options)
+		#driver = webdriver.Chrome(options=options)
 
 		driver.get(url)
 
