@@ -8,6 +8,10 @@ import time
 import os
 import sys
 import pathlib
+import platform
+
+#print(getattr(sys, 'frozen', False))
+#print(sys._MEIPASS)
 
 def handle_exception(e): #displays errorscreen, optionally saves screenshot of webdriver
 	tb1 = traceback.TracebackException.from_exception(e)
@@ -146,8 +150,12 @@ def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed w
 
 		global driver #ensures that all parts of the programm can access the webdriver
 
-		## use if os is windows and chromedriver is in /lib 
-		driver_location = pathlib.Path(getattr(sys, "._MEIPASS", os.getcwd()))/"lib"/"chromedriver.exe"
+		## use if chromedriver is in /lib
+		if platform.system() == "Windows":
+			driver_extension = ".exe"
+		else:
+			driver_extension = ""
+		driver_location = pathlib.Path(getattr(sys, "_MEIPASS", os.getcwd()))/"lib"/("chromedriver"+driver_extension)
 		driver = webdriver.Chrome(driver_location, options=options)
 
 		## use if chromedriver is in PATH
