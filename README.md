@@ -1,36 +1,43 @@
-# downloader
 
-**Version 1.0**
+# Downloader
 
-A Programm that automatically downloads files from <https://workgroups.helsinki.fi>\
-Tested on Ubuntu 18.04.5 LTS, Windows 10 Home and macOS Sierra
+**Version 1.0.0**
 
-## Requirements
+A Programm that automatically downloads files from <https://workgroups.helsinki.fi>
 
-The programm requires Chrome/Chromium and Chrome WebDriver 
-> sudo apt install chromium-chromedriver
+Tested and working on Ubuntu 18.04.5 LTS, Windows 10 Home and macOS Big Sur
 
-in addition to the following python modules:
 
-* eel
-* selenium
 
-> sudo pip3 install -r requirements.txt
+## Installation 
 
-## Installation
+1. Select and download the correct package for your OS and Chrome-version from [Releases](https://github.com/tobi314/downloader/Releases/)
 
-Just download the source code and install all requirements
+2. Extract the zip-file
 
-## Usage
+**or** 
 
-Execute main.py
+1. Download the source code
 
->sudo chmod a+x main.py\
->./main.py
+2. Install required python modules
 
+```bash
+pip install -r requirements.txt
+```
+3. Make required folder structure
+```bash
+mkdir lib
+```
+4. [Download chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and extract it into ./lib
+
+5. Compile the app (or just leave it be and execute main.py)
+```bash
+pyinstaller main.spec
+```
 ## License & copyright
 
-Distributed under GNU General Public License v3.0.
+Distributed under [MIT](https://choosealicense.com/licenses/mit/)
 
 © Tobias A. Jeltsch
+
 
