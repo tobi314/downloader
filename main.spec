@@ -1,13 +1,20 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+import eel
+import os
+import platform
 
 block_cipher = None
 
+if platform.system() == "Windows":
+    driver_extension = ".exe"
+else:
+    driver_extension = ""
 
 a = Analysis(['main.py'],
-             pathex=['/Users/tobias/Desktop/downloader-main'],
+             pathex=[os.getcwd()],
              binaries=[],
-             datas=[('/Users/tobias/Library/Python/3.8/lib/python/site-packages/eel/eel.js', 'eel'), ('web', 'web'), ('lib/chromedriver', 'lib')],
+             datas=[(eel.__file__.replace("__init__.py", "eel.js"), 'eel'), ('web', 'web'), ('lib/chromedriver'+driver_extension, 'lib')],
              hiddenimports=['bottle_websocket'],
              hookspath=[],
              runtime_hooks=[],
@@ -24,7 +31,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='main',
+          name='Downloader',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
