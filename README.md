@@ -11,7 +11,7 @@ Tested and working on Ubuntu 18.04.5 LTS, Windows 10 Home and macOS Big Sur
 
 ## Installation 
 
-1. Select and download the correct package for your OS and Chrome-version from [Releases](https://github.com/tobi314/downloader/Releases/)
+1. Select and download the correct package for your OS and Chrome-version from [Releases](https://github.com/tobi314/downloader/releases/)
 
 2. Extract the zip-file
 
