@@ -15,7 +15,7 @@ Tested and working on Ubuntu 18.04.5 LTS, Windows 10 Home and macOS Big Sur
 
 2. Extract the zip-file
 
-**or** 
+&nbsp;&nbsp;&nbsp;**or**
 
 1. Download the source code
 
@@ -36,7 +36,7 @@ pyinstaller main.spec
 ```
 ## License & copyright
 
-Distributed under [MIT](https://choosealicense.com/licenses/mit/)
+Distributed under the [MIT License](https://choosealicense.com/licenses/mit/)
 
 © Tobias A. Jeltsch
 
