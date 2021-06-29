@@ -14,7 +14,7 @@ else:
 a = Analysis(['main.py'],
              pathex=[os.getcwd()],
              binaries=[],
-             datas=[(eel.__file__.replace("__init__.py", "eel.js"), 'eel'), ('web', 'web'), ('lib/chromedriver'+driver_extension, 'lib')],
+             datas=[(eel.__file__.replace("__init__.py", "eel.js"), 'eel'), ('web', 'web'), (os.path.join('lib','chromedriver'+driver_extension), 'lib')],
              hiddenimports=['bottle_websocket'],
              hookspath=[],
              runtime_hooks=[],
