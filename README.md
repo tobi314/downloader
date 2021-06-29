@@ -36,7 +36,7 @@ pyinstaller main.spec
 ```
 ## License & copyright
 
-Distributed under the [MIT License](https://choosealicense.com/licenses/mit/)
+Distributed under the MIT License. See the [LICENSE](https://github.com/tobi314/downloader/blob/main/LICENSE)-file for more info.
 
 © Tobias A. Jeltsch
 
