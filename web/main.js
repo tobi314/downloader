@@ -29,7 +29,9 @@ function quitButtonClick() { //executed when user clicks "Quit"-Button
 }
 
 function backButtonClick() { //executed when user clicks "Back"-Button
-
+	//unmarks url input as invalid
+	document.getElementById("exampleInputUrl1").classList.remove("is-invalid");
+	
 	//hides all possible current pages and shows startpage
 	document.getElementById("successpage").style.display = "none";
 	document.getElementById("errorpage").style.display = "none";
@@ -45,6 +47,17 @@ function wrongLogin() {
 	//reshows login page
 	document.getElementById("loginpage").style.display = "block"; 
 	document.getElementById("loadingpage").style.display = "none";
+}
+
+eel.expose(badUrl);
+function badUrl() {
+	//marks url input field as invalid
+	document.getElementById("exampleInputUrl1").classList.add("is-invalid");
+
+	//reshows options page
+	document.getElementById("loginpage").style.display = "none"; 
+	document.getElementById("loadingpage").style.display = "none";
+	document.getElementById("optionspage").style.display = "block";
 }
 
 eel.expose(updateProgressbar); 

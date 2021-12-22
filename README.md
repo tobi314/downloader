@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ```bash
 mkdir lib
 ```
-4. [Download chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) and extract it into ./lib
+4. [Download chromedriver](https://sites.google.com/chromium.org/driver/downloads) and extract it into ./lib
 
 5. Compile the app (or just leave it be and execute main.py)
 ```bash

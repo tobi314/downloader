@@ -9,6 +9,7 @@ import os
 import sys
 import pathlib
 import platform
+import re
 
 #print(getattr(sys, 'frozen', False))
 #print(sys._MEIPASS)
@@ -113,9 +114,23 @@ def generate_filepath_html(path): #dynamically generates html to display downloa
 
 	return html
 
+def check_url(url):
+	if re.match(re.compile(r"https://(www\.|workgroups\.)helsinki\.fi\.*"), url):
+		return url
+	elif re.match(re.compile(r"(www\.|workgroups\.)helsinki\.fi\.*"), url):
+		return "https://"+url
+	elif re.match(re.compile(r"helsinki\.fi\.*"), url):
+		return "https://www."+url
+
 @eel.expose #exposes function, so that it can be called from main.js
 def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed whith "Next"-Button click, starts webdriver
 	try:
+		#checks url, prompts user to reinput it if bad
+		url = check_url(url)
+		if not url:
+			eel.badUrl()
+			return
+
 		#print(url, allowed_file_extensions, advanced_options)
 		options = webdriver.ChromeOptions()
 
