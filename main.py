@@ -170,7 +170,7 @@ def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed w
 		else:
 			driver_extension = ""
 		driver_location = pathlib.Path(getattr(sys, "_MEIPASS", os.getcwd()))/"lib"/("chromedriver"+driver_extension)
-		driver = webdriver.Chrome(driver_location, options=options)
+		driver = webdriver.Chrome(options=options)
 
 		## use if chromedriver is in PATH
 		#driver = webdriver.Chrome(options=options)
