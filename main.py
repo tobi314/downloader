@@ -21,7 +21,6 @@ def handle_exception(e): #displays errorscreen, optionally saves screenshot of w
 	if screenshot_on_error:
 		driver.save_screenshot("error.png")
 
-
 def login(username, password): #logs in into page
 	driver.find_element_by_id("default_login").click()
 	driver.find_element_by_id("username").send_keys(username)
@@ -55,7 +54,7 @@ def download_files(pages, cutoff): #downloads files
 	for page in pages: #loops through pages to get number of files
 		driver.get(page)
 		for link in driver.find_elements_by_css_selector('a[href^="/download"]'):
-			ext = os.path.splitext(link.get_attribute("data-linked-resource-default-alias"))[1]
+			ext = os.path.splitext(link.get_attribute("data-filename"))[1]
 			if (ext in file_extensions[0]) or ("" in file_extensions[0] and ext not in file_extensions[1]):
 				items += 1
 
@@ -63,14 +62,14 @@ def download_files(pages, cutoff): #downloads files
 	for page in pages: #loops through pages
 		driver.get(page)
 		for link in driver.find_elements_by_css_selector('a[href^="/download"]'): #loops through all downloadable links in page
-			ext = os.path.splitext(link.get_attribute("data-linked-resource-default-alias"))[1] #gets extension of file
+			ext = os.path.splitext(link.get_attribute("data-filename"))[1] #gets extension of file
 			if (ext in file_extensions[0]) or ("" in file_extensions[0] and ext not in file_extensions[1]): #check whether extension is allowed
 				link.click()
-				driver.find_element_by_css_selector('a[aria-label="Download"]').click() #downloads file
-				driver.find_element_by_css_selector('button[aria-label="Close"]').click() #closes file
+				#driver.find_element_by_css_selector('a[aria-label="Download"]').click() #downloads file
+				#driver.find_element_by_css_selector('button[aria-label="Close"]').click() #closes file
 
 				#updates progressbar
-				eel.updateProgressbar((i/items)*100,'downloading "'+link.get_attribute("data-linked-resource-default-alias")+'"...')
+				eel.updateProgressbar((i/items)*100,'downloading "'+link.get_attribute("data-filename")+'"...')
 
 				i += 1
 				if i > cutoff: #in case of there beeing too many files, aborts download
