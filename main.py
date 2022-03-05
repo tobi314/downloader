@@ -165,12 +165,13 @@ def nextButtonClick(url, allowed_file_extensions, advanced_options): #executed w
 		global driver #ensures that all parts of the programm can access the webdriver
 
 		## use if chromedriver is in /lib
+		
 		if platform.system() == "Windows":
 			driver_extension = ".exe"
 		else:
 			driver_extension = ""
 		driver_location = pathlib.Path(getattr(sys, "_MEIPASS", os.getcwd()))/"lib"/("chromedriver"+driver_extension)
-		driver = webdriver.Chrome(options=options)
+		driver = webdriver.Chrome(driver_location, options=options)
 
 		## use if chromedriver is in PATH
 		#driver = webdriver.Chrome(options=options)
@@ -200,4 +201,4 @@ def startButtonClick(username, password):
 
 if __name__ == '__main__':
 	eel.init("web")
-	eel.start("index.html", size=(600,460))
+	eel.start("index.html", size=(600,460), port=0)

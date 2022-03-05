@@ -1,4 +1,4 @@
-Eel==0.14.0
-selenium==3.141.0
-pyinstaller==4.3
+Eel >= 0.14.0
+selenium >= 3.141.0
+pyinstaller >= 4.3
 
